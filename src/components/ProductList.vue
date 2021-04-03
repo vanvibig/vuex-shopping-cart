@@ -1,7 +1,10 @@
 <template>
     <div>
         <h1>Product List</h1>
-        <ul>
+        <div v-if="loading" class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <ul v-else>
             <li v-for="product in products" v-bind:key="product.id">
                 {{ product.title }} - {{ product.price }}
             </li>
@@ -10,19 +13,20 @@
 </template>
 
 <script>
-import shop from '@/api/shop'
-import store from '@/store/index'
 
 export default {
     computed: {//run when properties called
+        loading() {
+            return this.$store.getters.isLoading
+        },
         products() {
-            return store.getters.availableProducts
+            return this.$store.getters.availableProducts
         }
     },
     created() {// run when new instance
-        shop.getProducts(products => {
-            store.commit('setProducts', products);
-        })
+        this.$store.dispatch('fetchProducts').then(() => {
+            this.$store.dispatch('setLoading', false)
+        });
     }
 }
 </script>

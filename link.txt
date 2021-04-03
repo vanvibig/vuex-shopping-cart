@@ -1,0 +1,3 @@
+https://vuex.vuejs.org/guide/#the-simplest-store
+https://vueschool.io/courses/vuex-for-everyone
+https://vueschool.io/lessons/create-a-new-project-with-vue-cli

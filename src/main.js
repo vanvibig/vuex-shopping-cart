@@ -4,4 +4,6 @@ import store from '@/store'
 
 import 'bootstrap/dist/css/bootstrap.css';
 
-createApp(App).use(store).mount('#app');
+
+const app = createApp(App);
+app.use(store).mount('#app');

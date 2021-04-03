@@ -1,10 +1,11 @@
-import Vuex from 'vuex';
 import shop from "@/api/shop";
+import {createStore} from 'vuex';
 
-export default new Vuex.Store({
+export default createStore({
     state: { // = data
+        loading: false,
         products: [],
-        loading: false
+        cart: [] // to store list of products
     },
     getters: {// = computed properties
         availableProducts(state) {
@@ -12,6 +13,23 @@ export default new Vuex.Store({
         },
         isLoading(state) {
             return state.loading
+        },
+        cartProducts(state) {
+            return state.cart.map(cartItem => {
+                const product = state.products.find(product => product.id === cartItem.id)
+                return {
+                    title: product.title,
+                    price: product.price,
+                    quantity: cartItem.quantity
+                }
+            });
+        },
+        cartTotal(state, getter) {
+            let total = 0
+            getter.cartProducts.forEach(product => {
+                total += product.price
+            })
+            return total;
         }
     },
     actions: {// = method
@@ -28,11 +46,17 @@ export default new Vuex.Store({
             });
 
         },
-        addToCart({commit}, product) {
+        addProductToCart(context, product) {
             if (product.inventory > 0) {
-                commit('pushProductToCart', product)
-            } else {
-                //show out of stock message
+                // check if item existed in cart
+                const cartItem = context.state.cart.find(item => item.id === product.id);
+                if (!cartItem) {
+                    context.commit('pushProductToCart', product.id);
+                } else {
+                    context.commit('incrementItemQuantity', cartItem);
+                }
+
+                context.commit('decrementProductInventory', product);
             }
         },
         setLoading({commit}, loading) {
@@ -46,6 +70,19 @@ export default new Vuex.Store({
         },
         setLoading(state, loading) {
             state.loading = loading
+        },
+        pushProductToCart(state, productId) {
+            state.cart.push({
+                id: productId,
+                quantity: 1
+            })
+        },
+        incrementItemQuantity(state, cartItem) {
+            cartItem.quantity += 1;
+        },
+        decrementProductInventory(state, product) {
+            product.inventory -= 1;
+            console.log(state.products)
         }
     }
 })

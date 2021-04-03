@@ -16,8 +16,8 @@ export default {
         setTimeout(() => {
             // simulate random checkout failure.
             (Math.random() > 0.5 || navigator.webdriver)
-                ? cb()
-                : errorCb()
+                ? cb()//simulate success
+                : errorCb()//simulate error
         }, 100)
     }
 }

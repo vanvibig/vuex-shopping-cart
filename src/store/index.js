@@ -5,7 +5,8 @@ export default createStore({
     state: { // = data
         loading: false,
         products: [],
-        cart: [] // to store list of products
+        cart: [], // to store list of products
+        checkoutStatus: null
     },
     getters: {// = computed properties
         availableProducts(state) {
@@ -44,7 +45,6 @@ export default createStore({
                     resolve()
                 })
             });
-
         },
         addProductToCart(context, product) {
             if (product.inventory > 0) {
@@ -61,6 +61,17 @@ export default createStore({
         },
         setLoading({commit}, loading) {
             commit('setLoading', loading)
+        },
+        checkout(context) {
+            shop.buyProducts(context.state.cart,
+                () => {// in case success
+                    context.commit('emptyCart')
+                    context.commit('setCheckoutStatus', 'success')
+                },
+                () => {//in case error
+                    context.commit('setCheckoutStatus', 'fail')
+                }
+            )
         }
     },
     mutations: {// setting or updating state
@@ -82,7 +93,12 @@ export default createStore({
         },
         decrementProductInventory(state, product) {
             product.inventory -= 1;
-            console.log(state.products)
+        },
+        setCheckoutStatus(state, status) {
+            state.checkoutStatus = status
+        },
+        emptyCart(state) {
+            state.cart = []
         }
     }
 })

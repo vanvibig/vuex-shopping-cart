@@ -16,7 +16,7 @@ import store from '@/store/index'
 export default {
     computed: {//run when properties called
         products() {
-            return store.state.products;
+            return store.getters.availableProducts
         }
     },
     created() {// run when new instance

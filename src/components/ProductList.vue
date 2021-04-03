@@ -10,17 +10,18 @@
 </template>
 
 <script>
-import shop from '../api/shop'
+import shop from '@/api/shop'
+import store from '@/store/index'
 
 export default {
-    data() {
-        return {
-            products: []
+    computed: {//run when properties called
+        products() {
+            return store.state.products;
         }
     },
-    created() {
+    created() {// run when new instance
         shop.getProducts(products => {
-            this.products = products
+            store.commit('setProducts', products);
         })
     }
 }

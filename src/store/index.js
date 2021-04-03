@@ -28,7 +28,7 @@ export default createStore({
         cartTotal(state, getter) {
             let total = 0
             getter.cartProducts.forEach(product => {
-                total += product.price
+                total += product.price * product.quantity
             })
             return total;
         }

@@ -4,10 +4,14 @@
         <div v-if="loading" class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
         </div>
-        <ul v-else>
+        <ul v-else class="row d-flex justify-content-center">
             <li v-for="product in products" v-bind:key="product.id">
-                {{ product.title }} - {{ product.price }} - {{product.inventory}}
-                <button @click="addProductToCart(product)">Add to cart</button>
+                <div class="card bd-highlight border-dark m-2 p-2">
+                    <div class="card-title">{{ product.title }}</div>
+                    <div class="card-title">${{ product.price }}</div>
+                    <div class="card-title">quantity: {{ product.inventory }}</div>
+                </div>
+                <button class="btn btn-primary" @click="addProductToCart(product)">Add to cart</button>
             </li>
         </ul>
     </div>

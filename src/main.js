@@ -3,6 +3,7 @@ import App from './App.vue'
 import store from '@/store'
 
 import 'bootstrap/dist/css/bootstrap.css';
+import '@/style.css';
 
 
 const app = createApp(App);
